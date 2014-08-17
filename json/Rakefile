@@ -1,0 +1,15 @@
+# We're going to generate a Ruby file from our .y file. 
+# The Ruby file needs to be regenerated every time the .y file changes.
+# A Rake task sounds like the perfect solution.
+
+# "translate .y files to .rb files using the following command":
+rule '.rb' => '.y' do |t|
+    sh "racc -l -o #{t.name} #{t.source}"
+end
+
+# when we run rake compile, rake will automatically translate the .y file to a .rb file using Racc
+task :compile => 'parser.rb'
+
+# we make the test task depend on the compile task so that 
+# when we run rake test, the compiled file is automatically generated
+task :test => :compile
